@@ -10,4 +10,4 @@ A virtual version of the [card game](http://asmadigames.com/files/InnovationRule
 ## Built with
 
 - [Create React App](https://create-react-app.dev/)
-- Redux
+- [React-Redux](https://react-redux.js.org/)
