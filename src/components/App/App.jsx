@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as playerActions from '../../actions/playerActions';
-import './App.css';
+
 import Game from '../Game/Game';
 import StartForm from '../StartForm/StartForm';
+import PageWrapper from '../../libs/ui/PageWrapper/PageWrapper';
 
 const mapStateToProps = store => ({
   usernames: store.players.usernames,
@@ -19,14 +20,14 @@ const App = ({ usernames, setPlayers }) => {
   };
 
   return (
-    <div>
+    <PageWrapper>
       {!usernames.length
         && <StartForm onSubmit={handleStartFormSubmit} />
       }
       {usernames.length > 0
         && <Game />
       }
-    </div>
+    </PageWrapper>
   );
 }
 
