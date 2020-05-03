@@ -23,7 +23,6 @@ const Players = ({
   },
 }) => {
   const AllPlayers = usernames.map((name, playerIdx) => {
-    console.log('name: ', name, ', playerIdx: ', playerIdx);
     const playerHand = handsByUsername[name]
       .filter(cardName => cards.find(c => c.name === cardName))
       .map(cardName => (<Card key={cardName} {...cards.find(c => c.name === cardName)} />));
