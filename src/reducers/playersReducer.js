@@ -10,7 +10,8 @@ import produce from 'immer';
 import actions from '../actions/actionTypes';
 
 const initialState = {
-  usernames: [],
+  gameReady: false,
+  usernames: ['pimone', 'tumbaa'],
   playersByUsername: {},
   handsByUsername: {},
 };
@@ -27,6 +28,9 @@ const initialState = {
 // are no mutations
 const playersReducer = produce((draft, { type, payload }) => {
   switch (type) {
+    case actions.SET_GAME_READY:
+      draft.gameReady = true;
+      break;
     case actions.SET_PLAYERS:
       payload.players.forEach(player => {
         draft.usernames.push(player.username);
