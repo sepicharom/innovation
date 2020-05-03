@@ -22,14 +22,17 @@ const Players = ({
     handsByUsername,
   },
 }) => {
-  const AllPlayers = usernames.map(name => {
+  const AllPlayers = usernames.map((name, playerIdx) => {
+    console.log('name: ', name, ', playerIdx: ', playerIdx);
     const playerHand = handsByUsername[name]
       .filter(cardName => cards.find(c => c.name === cardName))
       .map(cardName => (<Card key={cardName} {...cards.find(c => c.name === cardName)} />));
     return (
-      <Player key={name}
+      <Player 
+        key={name}
         name={name}
         hand={playerHand}
+        firstPlayer={playerIdx === 0}
       />
     )
   });
