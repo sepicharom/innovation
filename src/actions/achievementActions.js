@@ -7,9 +7,9 @@ export const setAchievements = (achievementsByAge) => dispatch => {
   })
 };
 
-export const claimAchievement = (achievementToClaim) => dispatch => {
+export const claimAchievement = (achievement, isSpecial = false) => dispatch => {
   dispatch({
     type: actions.CLAIM_ACHIEVEMENT,
-    payload: { achievementToClaim },
+    payload: { achievement, isSpecial },
   })
 };

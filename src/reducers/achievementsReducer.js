@@ -11,20 +11,24 @@ import produce from 'immer';
 import actions from '../actions/actionTypes';
 
 const initialState = {
-  1: null,
-  2: null,
-  3: null,
-  4: null,
-  5: null,
-  6: null,
-  7: null,
-  8: null,
-  9: null,
-  monument: true,
-  empire: true,
-  world: true,
-  wonder: true,
-  universe: true,
+  ageAchievements: {
+    1: null,
+    2: null,
+    3: null,
+    4: null,
+    5: null,
+    6: null,
+    7: null,
+    8: null,
+    9: null,
+  },
+  specialAchievements: {
+    Monument: true,
+    Empire: true,
+    World: true,
+    Wonder: true,
+    Universe: true,
+  },
   costMap: {
     1: 5,
     2: 10,
@@ -52,13 +56,18 @@ const achievementsReducer = produce((draft, { type, payload }) => {
   switch (type) {
     case actions.SET_ACHIEVEMENTS:
       Object.keys(payload.achievementsByAge).forEach(age => {
-        draft[age] = payload.achievementsByAge[age];
+        draft.ageAchievements[age] = payload.achievementsByAge[age];
       });
       break;
     case actions.CLAIM_ACHIEVEMENT:
       // when somone claims an achievement, 
       // set value to false since it is no longer available
-      draft[payload.achievementToClaim] = false;
+      if (payload.isSpecial) {
+        draft.specialAchievements[payload.achievement] = false;
+      }
+      else {
+        draft.ageAchievements[payload.achievement] = false;
+      }
       break;
     default:
       return draft;
