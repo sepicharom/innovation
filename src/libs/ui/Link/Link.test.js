@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import Player from './Player';
+import ReactDOM from 'react-dom';
+import Link from './Link';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Player />, div);
+  ReactDOM.render(<Link linkTo="/test">Test Link</Link>, div);
   ReactDOM.unmountComponentAtNode(div);
 });

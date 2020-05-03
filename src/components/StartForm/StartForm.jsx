@@ -3,7 +3,6 @@ import { Form, Field } from 'react-final-form';
 import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
-import './StartForm.css';
 
 const StartForm = ({ onSubmit }) => {
   return (

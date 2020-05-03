@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import Player from './Player';
+import ReactDOM from 'react-dom';
+import Group from './Group';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Player />, div);
+  ReactDOM.render(<Group />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

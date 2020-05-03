@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Card from './Card';
+import CardFront from './CardFront';
 
 test('renders card name', () => {
-  const { getByText } = render(<Card name="testCard" />);
+  const { getByText } = render(<CardFront name="testCard" />);
   const cardName = getByText(/testCard/i);
   expect(cardName).toBeInTheDocument();
 });

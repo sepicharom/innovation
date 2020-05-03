@@ -16,5 +16,6 @@ export default {
   // player actions
   SET_HANDS: 'SET_HANDS',
   SET_PLAYERS: 'SET_PLAYERS',
+  SET_GAME_READY: 'SET_GAME_READY',
   UPDATE_PLAYER_HAND: 'UPDATE_PLAYER_HAND',
 };

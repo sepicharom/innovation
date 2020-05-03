@@ -5,17 +5,21 @@ import * as playerActions from '../../actions/playerActions';
 import * as achievementActions from '../../actions/achievementActions';
 import { shuffle } from '../../utils/shuffle';
 
-import './Game.css';
+import Deck from '../Deck/Deck';
+import Players from '../Players/Players';
+import Achievements from '../Achievements/Achievements';
 
 const mapStateToProps = store => ({
   ...store.cards,
   achievements: store.achievements,
+  gameReady: store.players.gameReady,
   usernames: store.players.usernames,
   playersByUsername: store.players.playersByUsername,
 });
 
 const mapDispatchToProps = dispatch => ({
   setDeck: (cards) => dispatch(deckActions.setDeck(cards)),
+  setGameReady: () => dispatch(playerActions.setGameReady()),
   setInitialHands: (handsByUsername) => dispatch(playerActions.setHands(handsByUsername)),
   setAchievements: (achievementsByAge) => dispatch(achievementActions.setAchievements(achievementsByAge)),
 });
@@ -24,9 +28,11 @@ const Game = ({
   cards,
   cardNames,
   achievements,
+  gameReady,
   usernames,
   playersByUsername,
   setDeck,
+  setGameReady,
   setAchievements,
   setInitialHands,
 }) => {
@@ -64,11 +70,16 @@ const Game = ({
     setDeck(sortedDeck);
     setInitialHands(starterHands);
     setAchievements(achievementsByAge);
+    setGameReady();
+    
   }, []);
 
+  if (!gameReady) return null;
   return (
     <div>
-
+      <Players />
+      <Deck />
+      <Achievements />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import Player from './Player';
+import ReactDOM from 'react-dom';
+import Paragraph from './Paragraph';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Player />, div);
+  ReactDOM.render(<Paragraph content="test paragraph"/>, div);
   ReactDOM.unmountComponentAtNode(div);
 });

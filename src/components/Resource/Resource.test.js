@@ -1,9 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Player from './Player';
+import Resource from './Resource';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Player />, div);
+  ReactDOM.render(<Resource />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
+
