@@ -1,6 +1,8 @@
 # Innovation
 
-A virtual version of the [card game](http://asmadigames.com/files/InnovationRules.pdf)
+A virtual version of the [board game](http://asmadigames.com/files/InnovationRules.pdf)
+
+![game logo](./public/innovation.png)
 
 ## To run
 
@@ -11,3 +13,4 @@ A virtual version of the [card game](http://asmadigames.com/files/InnovationRule
 
 - [Create React App](https://create-react-app.dev/)
 - [React-Redux](https://react-redux.js.org/)
+- [Styled-Components](https://styled-components.com/)
