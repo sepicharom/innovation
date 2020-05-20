@@ -33,3 +33,9 @@ export const updateCurrentPlayer = (username) => dispatch => {
     payload: { username },
   })
 };
+
+export const playerActionOccurred = () => dispatch => {
+  dispatch({
+    type: actions.PLAYER_ACTION_OCCURRED,
+  });
+};

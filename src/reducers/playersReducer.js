@@ -68,6 +68,16 @@ const playersReducer = produce((draft, { type, payload }) => {
     case actions.UPDATE_CURRENT_PLAYER:
       draft.currentPlayer = payload.username;
       break;
+    case actions.PLAYER_ACTION_OCCURRED:
+      if (draft.actionNumber === 2) {
+        const curPlayerIdx = draft.usernames.indexOf(draft.currentPlayer);
+        const nextPlayerIdx =
+          curPlayerIdx === draft.usernames.length - 1 ? 0 : curPlayerIdx + 1;
+        draft.actionNumber = 1;
+        draft.currentPlayer = draft.usernames[nextPlayerIdx];
+      }
+      else draft.actionNumber = 2;
+      break;
     default:
       return draft;
   }
