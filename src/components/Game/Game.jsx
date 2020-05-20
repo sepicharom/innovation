@@ -9,7 +9,21 @@ import Deck from '../Deck/Deck';
 import Players from '../Players/Players';
 import Achievements from '../Achievements/Achievements';
 
-const mapStateToProps = store => ({
+import styled from 'styled-components/macro';
+
+const GameLayout = styled.div`
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-column-gap: 2rem;
+  grid-template-rows: auto;
+  grid-template-areas: 'cards players';
+`;
+
+const CardsContainer = styled.div`
+  grid-area: cards;
+`;
+
+const mapStateToProps = (store) => ({
   ...store.cards,
   achievements: store.achievements,
   gameReady: store.players.gameReady,
@@ -17,11 +31,13 @@ const mapStateToProps = store => ({
   playersByUsername: store.players.playersByUsername,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   setDeck: (cards) => dispatch(deckActions.setDeck(cards)),
   setGameReady: () => dispatch(playerActions.setGameReady()),
-  setInitialHands: (handsByUsername) => dispatch(playerActions.setHands(handsByUsername)),
-  setAchievements: (achievementsByAge) => dispatch(achievementActions.setAchievements(achievementsByAge)),
+  setInitialHands: (handsByUsername) =>
+    dispatch(playerActions.setHands(handsByUsername)),
+  setAchievements: (achievementsByAge) =>
+    dispatch(achievementActions.setAchievements(achievementsByAge)),
 });
 
 const Game = ({
@@ -42,13 +58,13 @@ const Game = ({
    * pull out starter hands for players
    * update deck, achievements, and player hands in store
    * @NOTE:
-   *    using useEffect here, but may want to switch to 
+   *    using useEffect here, but may want to switch to
    *    useLayoutEffect if noticing 'flicker' behavior
    *  @see: https://reacttraining.com/blog/useEffect-is-not-the-new-componentDidMount/
    */
   useEffect(() => {
     // run shuffle function on clones cards (so as not to mutate array)
-    const shuffledClonedCards = shuffle(cards.map(card => ({ ...card })));
+    const shuffledClonedCards = shuffle(cards.map((card) => ({ ...card })));
     // sort shuffled cards into deck obj by card ages
     const sortedDeck = shuffledClonedCards.reduce((byAge, card) => {
       if (!byAge[card.age]) byAge[card.age] = [];
@@ -65,23 +81,26 @@ const Game = ({
       hands[username] = [sortedDeck[1].pop()];
       return hands;
     }, {});
-    usernames.forEach(username => starterHands[username].push(sortedDeck[1].pop()));
+    usernames.forEach((username) =>
+      starterHands[username].push(sortedDeck[1].pop())
+    );
     // dispatch actions to set initial game play
     setDeck(sortedDeck);
     setInitialHands(starterHands);
     setAchievements(achievementsByAge);
     setGameReady();
-    
   }, []);
 
   if (!gameReady) return null;
   return (
-    <div>
+    <GameLayout>
+      <CardsContainer>
+        <Deck />
+        <Achievements />
+      </CardsContainer>
       <Players />
-      <Deck />
-      <Achievements />
-    </div>
+    </GameLayout>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

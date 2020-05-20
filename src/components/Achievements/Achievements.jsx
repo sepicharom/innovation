@@ -3,7 +3,20 @@ import { connect } from 'react-redux';
 import * as achievementActions from '../../actions/achievementActions';
 
 import AchievementCard from '../AchievementCard/AchievementCard';
-import Group from '../../libs/ui/Group/Group';
+
+import styled from 'styled-components/macro';
+
+const AchievementsContainer = styled.div`
+  >div:first-child {
+    border-bottom: 1px solid lightgray;
+  }
+`;
+
+const PilesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+`;
 
 const mapStateToProps = store => ({
   achievementData: store.achievements,
@@ -34,20 +47,20 @@ const Achievements = ({
     />
   ));
   return (
-    <div>
+    <AchievementsContainer>
       <div>
         <h3>Age Achievements</h3>
-        <Group theme="horizontal" center>
+        <PilesContainer>
           {AgeAchievements}
-        </Group>
+        </PilesContainer>
       </div>
       <div>
         <h3>Special Achievements</h3>
-        <Group theme="horizontal" center>
+        <PilesContainer>
           {SpecialAchievements}
-        </Group>
+        </PilesContainer>
       </div>
-    </div>
+    </AchievementsContainer>
   );
 }
 

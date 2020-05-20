@@ -1,27 +1,20 @@
 import React from 'react';
 
-import Group from '../../libs/ui/Group/Group';
-import Collapse from '../../libs/ui/Collapse/Collapse';
+import styled from 'styled-components/macro';
 
-const Player = ({
-  name,
-  hand,
-  firstPlayer,
-}) => {
-  const PlayerHand = (
-    <Group theme="horizontal" center>
-      {hand}
-    </Group>
-  );
+const StyledHand = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 2rem;
+`;
+
+const Player = ({ name, hand, firstPlayer }) => {
   return (
     <div>
-      <Collapse
-        header={name}
-        content={PlayerHand}
-        shouldDefaultOpen={firstPlayer}
-      />
+      <h2>{name}</h2>
+      <StyledHand>{hand}</StyledHand>
     </div>
   );
-}
+};
 
 export default Player;
