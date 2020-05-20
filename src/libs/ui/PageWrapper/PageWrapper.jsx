@@ -7,8 +7,7 @@ import styled from 'styled-components/macro';
 const PageWrapper = styled.section(() => `
   display: flex;
   flex-direction: column;
-  padding-top: 5rem;
-  max-width: 720px;
+  padding: 5rem 10rem;
   margin: auto;
 `);
 
