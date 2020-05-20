@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import { ARRAY_ERROR } from 'final-form';
 import arrayMutators from 'final-form-arrays';
@@ -88,6 +89,8 @@ const StartForm = ({ onSubmit }) => {
   )
 }
 
-
+StartForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default StartForm;
