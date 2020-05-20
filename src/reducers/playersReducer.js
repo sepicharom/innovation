@@ -1,7 +1,7 @@
 /**
  * @module  src/reducers/playersReducer
  * @author  samanthasalley
- * @description handle state updates for players. 
+ * @description handle state updates for players.
  *    (eg. username, achievements, etc.)
  * @exports playersReducer
  */
@@ -9,12 +9,33 @@
 import produce from 'immer';
 import actions from '../actions/actionTypes';
 
-const initialState = {
+const devState = {
   gameReady: false,
   usernames: ['pimone', 'tumbaa'],
-  playersByUsername: {},
+  playersByUsername: {
+    pimone: {
+      username: 'pimone',
+      age: 1,
+    },
+    tumbaa: {
+      username: 'tumbaa',
+      age: 1,
+    },
+  },
   handsByUsername: {},
+  currentPlayer: 'pimone',
+  actionNumber: 1,
 };
+
+// TODO: update refs from devState to initialState
+// const initialState = {
+//   gameReady: false,
+//   usernames: [],
+//   playersByUsername: {},
+//   handsByUsername: {},
+//   currentPlayer: '',
+//   actionNumber: 1,
+// };
 
 /**
  * @function playersReducer
@@ -24,7 +45,7 @@ const initialState = {
  */
 // The immer library allows us to mutate a temporary draft version of the state
 // Once our mutations are complete, immer will produce the new state based on the changes
-// There's no need for a default case, since immer will return the state unchanged if there 
+// There's no need for a default case, since immer will return the state unchanged if there
 // are no mutations
 const playersReducer = produce((draft, { type, payload }) => {
   switch (type) {
@@ -32,22 +53,24 @@ const playersReducer = produce((draft, { type, payload }) => {
       draft.gameReady = true;
       break;
     case actions.SET_PLAYERS:
-      payload.players.forEach(player => {
-        draft.usernames.push(player.username);
-        draft.playersByUsername[player.username] = player;
-      });
+      draft.usernames = Object.values(payload.players);
+      draft.playersByUsername = payload.players;
+      draft.currentPlayer = draft.usernames[0];
       break;
     case actions.SET_HANDS:
-      Object.keys(payload.handsByUsername).forEach(username => {
+      Object.keys(payload.handsByUsername).forEach((username) => {
         draft.handsByUsername[username] = payload.handsByUsername[username];
       });
       break;
     case actions.UPDATE_PLAYER_HAND:
       draft.handsByUsername[payload.username] = payload.newHand;
       break;
+    case actions.UPDATE_CURRENT_PLAYER:
+      draft.currentPlayer = payload.username;
+      break;
     default:
       return draft;
   }
-}, initialState); // initialize state
+}, devState); // initialize state
 
 export default playersReducer;

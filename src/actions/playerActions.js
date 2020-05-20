@@ -26,3 +26,10 @@ export const updatePlayerHand = (username, newHand) => dispatch => {
     payload: { username, newHand },
   })
 };
+
+export const updateCurrentPlayer = (username) => dispatch => {
+  dispatch({
+    type: actions.UPDATE_CURRENT_PLAYER,
+    payload: { username },
+  })
+};
