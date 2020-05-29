@@ -23,6 +23,7 @@ const devState = {
     },
   },
   handsByUsername: {},
+  boardsByUsername: {},
   currentPlayer: 'pimone',
   actionNumber: 1,
 };
@@ -33,6 +34,7 @@ const devState = {
 //   usernames: [],
 //   playersByUsername: {},
 //   handsByUsername: {},
+//   boardsByUsername: {},
 //   currentPlayer: '',
 //   actionNumber: 1,
 // };
@@ -64,6 +66,9 @@ const playersReducer = produce((draft, { type, payload }) => {
       break;
     case actions.UPDATE_PLAYER_HAND:
       draft.handsByUsername[payload.username] = payload.newHand;
+      break;
+    case actions.MELD_CARD:
+      draft.boardsByUsername[payload.username][payload.color].push(payload.card);
       break;
     case actions.UPDATE_CURRENT_PLAYER:
       draft.currentPlayer = payload.username;

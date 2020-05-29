@@ -27,6 +27,14 @@ export const updatePlayerHand = (username, newHand) => dispatch => {
   })
 };
 
+export const meldCard = (username, color, card) => dispatch => {
+  dispatch({
+    type: actions.MELD_CARD,
+    payload: { username, color, card },
+  })
+};
+
+
 export const updateCurrentPlayer = (username) => dispatch => {
   dispatch({
     type: actions.UPDATE_CURRENT_PLAYER,
