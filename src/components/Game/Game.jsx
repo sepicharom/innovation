@@ -89,7 +89,7 @@ const Game = ({
     setInitialHands(starterHands);
     setAchievements(achievementsByAge);
     setGameReady();
-  }, []);
+  }, [cards, setAchievements, setDeck, setGameReady, setInitialHands, usernames]);
 
   if (!gameReady) return null;
   return (

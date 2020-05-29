@@ -4,11 +4,20 @@ import * as playerActions from '../../actions/playerActions';
 
 import Card from '../CardFront/CardFront';
 import Player from '../Player/Player';
+import Header from '../../libs/ui/Header/Header';
+import Paragraph from '../../libs/ui/Paragraph/Paragraph';
 
 import styled from 'styled-components/macro';
 
 const PlayersContainer = styled.div`
   grid-area: players;
+`;
+
+const CurrentPlayerStatus = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const mapStateToProps = (store) => ({
@@ -48,7 +57,10 @@ const Players = ({
   });
   return (
     <PlayersContainer>
-      <h3>Current Player: {currentPlayer}</h3>
+      <CurrentPlayerStatus>
+        <Header size="h3" removeMarginBottom>Current Player: {currentPlayer}</Header>
+        <Paragraph content={`Player Action: ${actionNumber}`} />
+      </CurrentPlayerStatus>
       {AllPlayers}
     </PlayersContainer>
   );

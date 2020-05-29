@@ -95,6 +95,7 @@ Header.propTypes = {
   center: PropTypes.bool,
   addPaddingTop: PropTypes.bool,
   removeMarginTop: PropTypes.bool,
+  removeMarginBottom: PropTypes.bool,
 };
 
 export default Header;

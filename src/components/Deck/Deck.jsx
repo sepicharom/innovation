@@ -5,7 +5,6 @@ import * as playerActions from '../../actions/playerActions';
 import { draw as drawCard } from '../../utils/deck';
 
 import DrawPile from '../DrawPile/DrawPile';
-import Group from '../../libs/ui/Group/Group';
 
 import styled from 'styled-components/macro';
 
