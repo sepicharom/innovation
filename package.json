@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "final-form": "^4.19.1",
     "final-form-arrays": "^3.0.2",
+    "firebase": "^7.14.6",
     "immer": "^6.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -21,8 +22,8 @@
     "styled-components": "^5.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "REACT_APP_FIREBASE_CONFIG=../keys/fb-innovation-board-game.json react-scripts start",
+    "build": "REACT_APP_FIREBASE_CONFIG=../keys/fb-innovation-board-game.json react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
