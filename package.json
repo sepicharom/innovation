@@ -22,8 +22,8 @@
     "styled-components": "^5.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_FIREBASE_CONFIG=../keys/fb-innovation-board-game.json react-scripts start",
-    "build": "REACT_APP_FIREBASE_CONFIG=../keys/fb-innovation-board-game.json react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
