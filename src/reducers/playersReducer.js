@@ -10,6 +10,7 @@ import produce from 'immer';
 import actions from '../actions/actionTypes';
 
 const devState = {
+  gameId: null,
   gameReady: false,
   usernames: ['pimone', 'tumbaa'],
   playersByUsername: {
@@ -53,6 +54,9 @@ const playersReducer = produce((draft, { type, payload }) => {
   switch (type) {
     case actions.SET_GAME_READY:
       draft.gameReady = true;
+      break;
+    case actions.SET_GAME_ID:
+      draft.gameId = payload.gameId;
       break;
     case actions.SET_PLAYERS:
       draft.usernames = Object.values(payload.players);

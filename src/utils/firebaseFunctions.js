@@ -10,7 +10,20 @@ export const getCards = async () => {
     console.log('cards: ', cards);
     return cards;
   } catch (err) {
-    console.error('err: ', err);
+    console.error('getCards err: ', err);
+    throw err;
+  }
+};
+
+export const createGame = async (players) => {
+  try {
+    const createdGame = await Firebase.db.collection('games').add({
+      players: [...players],
+    });
+    if (!createdGame.id) throw createdGame;
+    return createdGame;
+  } catch (err) {
+    console.error('createGame err: ', err);
     throw err;
   }
 };
