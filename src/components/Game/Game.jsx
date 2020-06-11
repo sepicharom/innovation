@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import * as deckActions from '../../actions/deckActions';
 import * as playerActions from '../../actions/playerActions';
 import * as achievementActions from '../../actions/achievementActions';
-import { shuffle } from '../../utils/shuffle';
+import { createStarterDeck, selectStarterHands } from '../../utils/setup';
+import { getGame } from '../../utils/firebaseFunctions';
 
 import Deck from '../Deck/Deck';
 import Players from '../Players/Players';
 import Achievements from '../Achievements/Achievements';
+import SaveButton from '../SaveButton/SaveButton';
 
 import styled from 'styled-components/macro';
 
@@ -26,6 +29,7 @@ const CardsContainer = styled.div`
 const mapStateToProps = (store) => ({
   ...store.cards,
   achievements: store.achievements,
+  gameId: store.players.gameId,
   gameReady: store.players.gameReady,
   usernames: store.players.usernames,
   playersByUsername: store.players.playersByUsername,
@@ -34,6 +38,10 @@ const mapStateToProps = (store) => ({
 const mapDispatchToProps = (dispatch) => ({
   setDeck: (cards) => dispatch(deckActions.setDeck(cards)),
   setGameReady: () => dispatch(playerActions.setGameReady()),
+  setGameId: (gameId) => dispatch(playerActions.setGameId(gameId)),
+  setPlayers: (players) => dispatch(playerActions.setPlayers(players)),
+  setInitialBoards: (boardsByUsername) =>
+    dispatch(playerActions.setBoards(boardsByUsername)),
   setInitialHands: (handsByUsername) =>
     dispatch(playerActions.setHands(handsByUsername)),
   setAchievements: (achievementsByAge) =>
@@ -41,17 +49,22 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const Game = ({
-  cards,
-  cardNames,
+  cardIds,
+  cardsById,
   achievements,
+  // gameId,
   gameReady,
   usernames,
   playersByUsername,
   setDeck,
+  setGameId,
+  setPlayers,
   setGameReady,
   setAchievements,
   setInitialHands,
+  setInitialBoards,
 }) => {
+  let { gameId } = useParams();
   /**
    * sort & shuffle cards
    * pull out age achievements
@@ -63,38 +76,66 @@ const Game = ({
    *  @see: https://reacttraining.com/blog/useEffect-is-not-the-new-componentDidMount/
    */
   useEffect(() => {
-    // run shuffle function on clones cards (so as not to mutate array)
-    const shuffledClonedCards = shuffle(cards.map((card) => ({ ...card })));
-    // sort shuffled cards into deck obj by card ages
-    const sortedDeck = shuffledClonedCards.reduce((byAge, card) => {
-      if (!byAge[card.age]) byAge[card.age] = [];
-      byAge[card.age].push(card.name);
-      return byAge;
-    }, {});
-    // select achievements off the top of each age - except 10
-    const achievementsByAge = Object.keys(sortedDeck).reduce((byAge, age) => {
-      if (age < 10) byAge[age] = sortedDeck[age].pop();
-      return byAge;
-    }, {});
-    // select starter hands for players
-    const starterHands = usernames.reduce((hands, username) => {
-      hands[username] = [sortedDeck[1].pop()];
-      return hands;
-    }, {});
-    usernames.forEach((username) =>
-      starterHands[username].push(sortedDeck[1].pop())
-    );
-    // dispatch actions to set initial game play
-    setDeck(sortedDeck);
-    setInitialHands(starterHands);
-    setAchievements(achievementsByAge);
-    setGameReady();
-  }, [cards, setAchievements, setDeck, setGameReady, setInitialHands, usernames]);
+    const fetchExistingGame = async () => {
+      try {
+        const gameData = await getGame(gameId);
+        return gameData;
+      } catch (err) {
+        console.error('Game fetchExistingGame error: ', err);
+        throw err;
+      }
+    };
+    const setupGame = async () => {
+      try {
+        const gameData = !usernames.length ? await fetchExistingGame() : {};
+        const players = gameData.players;
+        let deck = gameData.deck;
+        let achievementsByAge = gameData.achievements;
+        let hands = gameData.hands;
+        const boards = gameData.boards || null;
+        if (!usernames.length && !players) throw new Error('missing players!');
+        if (!deck || !achievementsByAge) {
+          const starterCards = createStarterDeck(cardsById);
+          deck = starterCards.deck;
+          achievementsByAge = starterCards.achievementsByAge;
+        }
+        if (!hands) hands = selectStarterHands(deck[1], usernames);
+        if (!usernames.length) {
+          setPlayers(players);
+          setGameId(gameId);
+        }
+        if (boards) setInitialBoards(boards);
+        setDeck(deck);
+        setInitialHands(hands);
+        setAchievements(achievementsByAge);
+        setGameReady();
+      } catch (err) {
+        console.error('Game setupGame error: ', err);
+        throw err;
+      }
+    };
+    if (cardIds.length) setupGame();
+  }, [
+    cardIds,
+    cardsById,
+    gameId,
+    gameReady,
+    usernames,
+    setAchievements,
+    setDeck,
+    setGameId,
+    setPlayers,
+    setGameReady,
+    setInitialHands,
+    setInitialBoards,
+  ]);
+  // }, [cards, setAchievements, setDeck, setGameReady, setInitialHands, usernames]);
 
   if (!gameReady) return null;
   return (
     <GameLayout>
       <CardsContainer>
+        <SaveButton />
         <Deck />
         <Achievements />
       </CardsContainer>
