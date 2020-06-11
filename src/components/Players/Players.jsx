@@ -22,7 +22,7 @@ const CurrentPlayerStatus = styled.div`
 
 const mapStateToProps = (store) => ({
   playerData: store.players,
-  cards: store.cards.cards,
+  cardsById: store.cards.cardsById,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const Players = ({
-  cards,
+  cardsById,
   playerData: {
     usernames,
     playersByUsername,
@@ -42,9 +42,9 @@ const Players = ({
 }) => {
   const AllPlayers = usernames.map((name, playerIdx) => {
     const playerHand = handsByUsername[name]
-      .filter((cardName) => cards.find((c) => c.name === cardName))
-      .map((cardName) => (
-        <Card key={cardName} {...cards.find((c) => c.name === cardName)} />
+      .filter((cardId) => cardsById[cardId])
+      .map((cardId) => (
+        <Card key={cardId} {...cardsById[cardId]} />
       ));
     return (
       <Player
