@@ -7,7 +7,6 @@ export const getCards = async () => {
       throw snapshot;
     }
     const cards = snapshot.docs.map(Firebase.processDoc);
-    console.log('cards: ', cards);
     return cards;
   } catch (err) {
     console.error('getCards err: ', err);
@@ -15,15 +14,50 @@ export const getCards = async () => {
   }
 };
 
+export const getGame = async (gameId) => {
+  try {
+    const gameDoc = await Firebase.db.collection('games').doc(gameId).get();
+    if (!gameDoc || !gameDoc.exists) throw gameDoc;
+    const gameData = Firebase.processDoc(gameDoc);
+    return gameData;
+  } catch (err) {
+    console.error('getGame err: ', err);
+    throw err;
+  }
+};
+
 export const createGame = async (players) => {
   try {
     const createdGame = await Firebase.db.collection('games').add({
-      players: [...players],
+      players,
     });
     if (!createdGame.id) throw createdGame;
     return createdGame;
   } catch (err) {
     console.error('createGame err: ', err);
+    throw err;
+  }
+};
+
+/**
+ * @name saveGame
+ * @param {string} gameId
+ * @param {object} gameData
+ * @param {boolean} merge
+ *   @see https://firebase.google.com/docs/firestore/manage-data/add-data#set_a_document
+ * @description updates an exisitng game in the db
+ *  (or creates if gameId doesn't currently exist)
+ * @returns {boolean} whether or not game was saved
+ */
+export const saveGame = async (gameId, gameData, merge = true) => {
+  try {
+    await Firebase.db
+      .collection('games')
+      .doc(gameId)
+      .set({ ...gameData }, { merge });
+    return true;
+  } catch (err) {
+    console.error('saveGame err: ', err);
     throw err;
   }
 };
