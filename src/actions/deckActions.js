@@ -1,4 +1,16 @@
+/**
+ * @module  actions/deckActions
+ * @author  samanthasalley
+ * @description Action Creators for deck and cards
+ */
 import actions from './actionTypes';
+
+export const setCards = (cardData) => dispatch => {
+  dispatch({
+    type: actions.SET_CARDS,
+    payload: cardData,
+  });
+};
 
 export const setDeck = (deck) => dispatch => {
   dispatch({
