@@ -59,6 +59,11 @@ const achievementsReducer = produce((draft, { type, payload }) => {
         draft.ageAchievements[age] = payload.achievementsByAge[age];
       });
       break;
+    case actions.SET_SPECIAL_ACHIEVEMENTS:
+      Object.keys(payload.specialAchievements).forEach(name => {
+        draft.specialAchievements[name] = payload.specialAchievements[name];
+      });
+      break;
     case actions.CLAIM_ACHIEVEMENT:
       // when somone claims an achievement, 
       // set value to false since it is no longer available
