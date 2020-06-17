@@ -7,16 +7,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import * as playerActions from '../../actions/playerActions';
+import * as gameActions from '../../actions/gameActions';
 
 import StartForm from '../StartForm/StartForm';
 
 const mapStateToProps = (store) => ({
-  gameId: store.players.gameId,
+  gameId: store.game.gameId,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  startGame: (formValues) => dispatch(playerActions.startGame(formValues)),
+  startGame: (formValues) => dispatch(gameActions.startGame(formValues)),
 });
 
 const Start = ({ gameId, startGame }) => {

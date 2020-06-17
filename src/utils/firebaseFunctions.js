@@ -26,10 +26,10 @@ export const getGame = async (gameId) => {
   }
 };
 
-export const createGame = async (players) => {
+export const createGame = async (playersByUsername) => {
   try {
     const createdGame = await Firebase.db.collection('games').add({
-      players,
+      playersByUsername,
     });
     if (!createdGame.id) throw createdGame;
     return createdGame;
@@ -47,17 +47,11 @@ export const createGame = async (players) => {
  *   @see https://firebase.google.com/docs/firestore/manage-data/add-data#set_a_document
  * @description updates an exisitng game in the db
  *  (or creates if gameId doesn't currently exist)
- * @returns {boolean} whether or not game was saved
+ * @returns {Promise}
  */
 export const saveGame = async (gameId, gameData, merge = true) => {
-  try {
-    await Firebase.db
-      .collection('games')
-      .doc(gameId)
-      .set({ ...gameData }, { merge });
-    return true;
-  } catch (err) {
-    console.error('saveGame err: ', err);
-    throw err;
-  }
+  return Firebase.db
+    .collection('games')
+    .doc(gameId)
+    .set({ ...gameData }, { merge });
 };

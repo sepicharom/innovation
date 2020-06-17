@@ -10,12 +10,8 @@ import produce from 'immer';
 import actions from '../actions/actionTypes';
 
 const initialState = {
-  gameId: null,
-  gameReady: false,
   usernames: [],
   playersByUsername: {},
-  handsByUsername: {},
-  boardsByUsername: {},
   currentPlayer: '',
   actionNumber: 1,
 };
@@ -32,37 +28,10 @@ const initialState = {
 // are no mutations
 const playersReducer = produce((draft, { type, payload }) => {
   switch (type) {
-    case actions.SET_GAME_READY:
-      draft.gameReady = true;
-      break;
-    case actions.SET_GAME_ID:
-      draft.gameId = payload.gameId;
-      break;
     case actions.SET_PLAYERS:
       draft.usernames = Object.keys(payload.players);
       draft.playersByUsername = payload.players;
       draft.currentPlayer = draft.usernames[0];
-      break;
-    case actions.SET_BOARDS:
-      Object.keys(payload.boardsByUsername).forEach((username) => {
-        draft.boardsByUsername[username] = payload.boardsByUsername[username];
-      });
-      break;
-    case actions.UPDATE_PLAYER_BOARD:
-      draft.boardsByUsername[payload.username] = payload.newBoard;
-      break;
-    case actions.SET_HANDS:
-      Object.keys(payload.handsByUsername).forEach((username) => {
-        draft.handsByUsername[username] = payload.handsByUsername[username];
-      });
-      break;
-    case actions.UPDATE_PLAYER_HAND:
-      draft.handsByUsername[payload.username] = payload.newHand;
-      break;
-    case actions.MELD_CARD:
-      draft.boardsByUsername[payload.username][payload.color].push(
-        payload.card
-      );
       break;
     case actions.UPDATE_CURRENT_PLAYER:
       draft.currentPlayer = payload.username;

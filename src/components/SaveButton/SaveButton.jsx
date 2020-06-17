@@ -12,24 +12,27 @@ import { saveGame } from '../../utils/firebaseFunctions';
 import Button from '../../libs/ui/Button/Button';
 
 const mapStateToProps = (store) => ({
-  playersData: store.players,
   deck: store.deck,
-  achievements: store.achievements,
+  gameId: store.game.gameId,
+  achievementsByAge: store.achievements,
+  hands: store.game.handsByUsername,
+  boards: store.game.boardsByUsername,
+  players: store.players.playersByUsername,
 });
 
-const SaveButton = ({ playersData, deck, achievements }) => {
+const SaveButton = ({ players, hands, boards, deck, achievementsByAge, gameId }) => {
   const [lastSaved, updateLastSaved] = useState(null);
 
   const triggerGameSave = async () => {
     try {
       const saveData = {
         deck,
-        achievements,
-        players: playersData.playersByUsername,
-        hands: playersData.handsByUsername,
-        boards: playersData.boardsByUsername,
+        achievementsByAge,
+        players,
+        hands,
+        boards,
       };
-      await saveGame(playersData.gameId, saveData, false);
+      await saveGame(gameId, saveData, false);
       updateLastSaved(moment());
     }
     catch(err) {

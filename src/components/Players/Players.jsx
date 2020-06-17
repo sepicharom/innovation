@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as playerActions from '../../actions/playerActions';
+import * as gameActions from '../../actions/gameActions';
+import { saveGame } from '../../utils/firebaseFunctions';
 
 import Card from '../CardFront/CardFront';
 import Player from '../Player/Player';
@@ -23,29 +24,35 @@ const CurrentPlayerStatus = styled.div`
 const mapStateToProps = (store) => ({
   playerData: store.players,
   cardsById: store.cards.cardsById,
+  handsByUsername: store.game.handsByUsername,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   updatePlayerHand: (player, hand) =>
-    dispatch(playerActions.updatePlayerHand(player, hand)),
+    dispatch(gameActions.updatePlayerHand(player, hand)),
 });
 
 const Players = ({
   cardsById,
+  handsByUsername,
   playerData: {
+    gameId,
     usernames,
     playersByUsername,
-    handsByUsername,
     currentPlayer,
     actionNumber,
   },
 }) => {
+  useEffect(() => {
+    saveGame(gameId, { currentPlayer });
+  }, [gameId, currentPlayer]);
+  useEffect(() => {
+    saveGame(gameId, { actionNumber });
+  }, [gameId, actionNumber]);
   const AllPlayers = usernames.map((name, playerIdx) => {
     const playerHand = handsByUsername[name]
       .filter((cardId) => cardsById[cardId])
-      .map((cardId) => (
-        <Card key={cardId} {...cardsById[cardId]} />
-      ));
+      .map((cardId) => <Card key={cardId} {...cardsById[cardId]} />);
     return (
       <Player
         key={name}
@@ -58,7 +65,9 @@ const Players = ({
   return (
     <PlayersContainer>
       <CurrentPlayerStatus>
-        <Header size="h3" removeMarginBottom>Current Player: {currentPlayer}</Header>
+        <Header size="h3" removeMarginBottom>
+          Current Player: {currentPlayer}
+        </Header>
         <Paragraph content={`Player Action: ${actionNumber}`} />
       </CurrentPlayerStatus>
       {AllPlayers}

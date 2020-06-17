@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import * as deckActions from '../../actions/deckActions';
+import * as gameActions from '../../actions/gameActions';
 import * as playerActions from '../../actions/playerActions';
 import * as achievementActions from '../../actions/achievementActions';
 import { createStarterDeck, selectStarterHands } from '../../utils/setup';
@@ -29,42 +30,23 @@ const CardsContainer = styled.div`
 const mapStateToProps = (store) => ({
   ...store.cards,
   achievements: store.achievements,
-  gameId: store.players.gameId,
   gameReady: store.players.gameReady,
   usernames: store.players.usernames,
   playersByUsername: store.players.playersByUsername,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setDeck: (cards) => dispatch(deckActions.setDeck(cards)),
-  setGameReady: () => dispatch(playerActions.setGameReady()),
-  setGameId: (gameId) => dispatch(playerActions.setGameId(gameId)),
-  setPlayers: (players) => dispatch(playerActions.setPlayers(players)),
-  setInitialBoards: (boardsByUsername) =>
-    dispatch(playerActions.setBoards(boardsByUsername)),
-  setInitialHands: (handsByUsername) =>
-    dispatch(playerActions.setHands(handsByUsername)),
-  setAchievements: (achievementsByAge) =>
-    dispatch(achievementActions.setAchievements(achievementsByAge)),
 });
 
 const Game = ({
   cardIds,
   cardsById,
   achievements,
-  // gameId,
   gameReady,
   usernames,
   playersByUsername,
-  setDeck,
-  setGameId,
-  setPlayers,
-  setGameReady,
-  setAchievements,
-  setInitialHands,
-  setInitialBoards,
+  dispatch,
 }) => {
   let { gameId } = useParams();
+  const [redirectToStart, setRedirectToStart] = useState(false);
+  console.log('redirectToStart: ', redirectToStart);
   /**
    * sort & shuffle cards
    * pull out age achievements
@@ -88,10 +70,10 @@ const Game = ({
     const setupGame = async () => {
       try {
         const gameData = !usernames.length ? await fetchExistingGame() : {};
-        const players = gameData.players;
+        const players = gameData.playersByUsername;
         let deck = gameData.deck;
-        let achievementsByAge = gameData.achievements;
-        let hands = gameData.hands;
+        let achievementsByAge = gameData.achievementsByAge;
+        let hands = gameData.handsByUsername;
         const boards = gameData.boards || null;
         if (!usernames.length && !players) throw new Error('missing players!');
         if (!deck || !achievementsByAge) {
@@ -101,36 +83,35 @@ const Game = ({
         }
         if (!hands) hands = selectStarterHands(deck[1], usernames);
         if (!usernames.length) {
-          setPlayers(players);
-          setGameId(gameId);
+          dispatch(playerActions.setPlayers(players));
+          dispatch(gameActions.setGameId(gameId));
         }
-        if (boards) setInitialBoards(boards);
-        setDeck(deck);
-        setInitialHands(hands);
-        setAchievements(achievementsByAge);
-        setGameReady();
+        if (boards) dispatch(gameActions.setBoards(boards));
+        dispatch(deckActions.setDeck(deck));
+        dispatch(gameActions.setHands(hands));
+        dispatch(achievementActions.setAchievements(achievementsByAge));
+        dispatch(gameActions.setGameReady());
       } catch (err) {
         console.error('Game setupGame error: ', err);
-        throw err;
+        setRedirectToStart(true);
       }
     };
-    if (cardIds.length) setupGame();
+    if (cardIds.length && !gameReady) setupGame();
+    // if (cardIds.length && !gameReady) {
+    //   if (!usernames.length) setupGame();
+    //   else 
+    // }
   }, [
     cardIds,
     cardsById,
     gameId,
     gameReady,
     usernames,
-    setAchievements,
-    setDeck,
-    setGameId,
-    setPlayers,
-    setGameReady,
-    setInitialHands,
-    setInitialBoards,
+    dispatch,
+    setRedirectToStart,
   ]);
-  // }, [cards, setAchievements, setDeck, setGameReady, setInitialHands, usernames]);
 
+  if (redirectToStart) return <Redirect to="/" />;
   if (!gameReady) return null;
   return (
     <GameLayout>
@@ -144,4 +125,4 @@ const Game = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default connect(mapStateToProps, null)(Game);
