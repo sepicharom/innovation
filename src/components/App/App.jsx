@@ -8,7 +8,7 @@
 
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+// import { Switch, Route } from 'react-router-dom';
 import * as deckActions from '../../actions/deckActions';
 import { getCards } from '../../utils/firebaseFunctions';
 
@@ -16,11 +16,15 @@ import Game from '../Game/Game';
 import Start from '../Start/Start';
 import PageWrapper from '../../libs/ui/PageWrapper/PageWrapper';
 
+const mapStateToProps = (store) => ({
+  gameReady: store.game.gameReady,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCards: (cards) => dispatch(deckActions.setCards(cards)),
 });
 
-const App = ({ setCards }) => {
+const App = ({ gameReady, setCards }) => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
@@ -33,18 +37,17 @@ const App = ({ setCards }) => {
         setCards({ cardIds, cardsById });
       } catch (err) {
         console.error('fetchCards err:', err);
+        throw err;
       }
     };
     fetchCards();
   }, [setCards]);
   return (
     <PageWrapper>
-      <Switch>
-        <Route exact path="/" component={Start} />
-        <Route exact path="/room/:gameId" component={Game} />
-      </Switch>
+      {!gameReady && <Start />}
+      {gameReady && <Game />}
     </PageWrapper>
   );
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

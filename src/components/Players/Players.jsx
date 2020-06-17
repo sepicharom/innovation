@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as gameActions from '../../actions/gameActions';
-import { saveGame } from '../../utils/firebaseFunctions';
 
 import Card from '../CardFront/CardFront';
 import Player from '../Player/Player';
@@ -43,12 +42,12 @@ const Players = ({
     actionNumber,
   },
 }) => {
-  useEffect(() => {
-    saveGame(gameId, { currentPlayer });
-  }, [gameId, currentPlayer]);
-  useEffect(() => {
-    saveGame(gameId, { actionNumber });
-  }, [gameId, actionNumber]);
+  // useEffect(() => {
+  //   saveGame(gameId, { currentPlayer });
+  // }, [gameId, currentPlayer]);
+  // useEffect(() => {
+  //   saveGame(gameId, { actionNumber });
+  // }, [gameId, actionNumber]);
   const AllPlayers = usernames.map((name, playerIdx) => {
     const playerHand = handsByUsername[name]
       .filter((cardId) => cardsById[cardId])

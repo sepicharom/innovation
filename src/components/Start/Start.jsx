@@ -6,26 +6,23 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import * as gameActions from '../../actions/gameActions';
 
 import StartForm from '../StartForm/StartForm';
 
 const mapStateToProps = (store) => ({
   gameId: store.game.gameId,
+  cardsById: store.cards.cardsById,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  startGame: (formValues) => dispatch(gameActions.startGame(formValues)),
-});
-
-const Start = ({ gameId, startGame }) => {
-  if (gameId) return <Redirect to={`/room/${gameId}`} />;
+const Start = ({ dispatch, cardsById }) => {
+  const handleSubmit = (formValues) =>
+    dispatch(gameActions.setupGame(formValues, cardsById));
   return (
     <main>
-      <StartForm onSubmit={startGame} />
+      <StartForm onSubmit={handleSubmit} />
     </main>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Start);
+export default connect(mapStateToProps, null)(Start);

@@ -1,6 +1,9 @@
 import actions from './actionTypes';
-import { setPlayers } from './playerActions';
-import { createPlayers } from '../utils/setup';
+import {
+  createPlayers,
+  createStarterDeck,
+  selectStarterHands,
+} from '../utils/setup';
 import { createGame } from '../utils/firebaseFunctions';
 
 export const setGameReady = () => (dispatch) => {
@@ -51,14 +54,32 @@ export const meldCard = (username, color, card) => (dispatch) => {
   });
 };
 
-export const startGame = (formValues) => async (dispatch) => {
+export const startGame = (gameData) => (dispatch) => {
+  dispatch({
+    type: actions.START_GAME,
+    payload: { ...gameData },
+  });
+};
+
+export const setupGame = (formValues, cardsById) => async (
+  dispatch
+) => {
   try {
     const players = createPlayers(formValues.players);
     const gameData = await createGame(players);
-    dispatch(setPlayers(players));
-    dispatch(setGameId(gameData.id));
+    const { deck, achievementsByAge } = createStarterDeck(cardsById);
+    const hands = selectStarterHands(deck[1], Object.keys(players));
+    dispatch(
+      startGame({
+        players,
+        deck,
+        achievementsByAge,
+        hands,
+        gameId: gameData.id,
+      })
+    );
   } catch (err) {
-    console.error('startGame err: ', err);
+    console.error('setupGame err: ', err);
     throw err;
   }
 };

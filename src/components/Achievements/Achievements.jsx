@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as achievementActions from '../../actions/achievementActions';
-import { saveGame } from '../../utils/firebaseFunctions';
 
 import AchievementCard from '../AchievementCard/AchievementCard';
 
@@ -34,12 +33,12 @@ const Achievements = ({
   achievementData: { ageAchievements, costMap, specialAchievements },
   claimAchievement,
 }) => {
-  useEffect(() => {
-    saveGame(gameId, { achievementsByAge: ageAchievements });
-  }, [gameId, ageAchievements]);
-  useEffect(() => {
-    saveGame(gameId, { specialAchievements });
-  }, [gameId, specialAchievements]);
+  // useEffect(() => {
+  //   saveGame(gameId, { achievementsByAge: ageAchievements });
+  // }, [gameId, ageAchievements]);
+  // useEffect(() => {
+  //   saveGame(gameId, { specialAchievements });
+  // }, [gameId, specialAchievements]);
   const AgeAchievements = Object.keys(ageAchievements).map((age) => (
     <AchievementCard
       key={`age-${age}-achievement`}

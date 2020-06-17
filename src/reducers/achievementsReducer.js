@@ -54,6 +54,7 @@ const initialState = {
 // are no mutations
 const achievementsReducer = produce((draft, { type, payload }) => {
   switch (type) {
+    case actions.START_GAME:
     case actions.SET_ACHIEVEMENTS:
       Object.keys(payload.achievementsByAge).forEach(age => {
         draft.ageAchievements[age] = payload.achievementsByAge[age];

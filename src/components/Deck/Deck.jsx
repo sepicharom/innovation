@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as deckActions from '../../actions/deckActions';
 import * as gameActions from '../../actions/gameActions';
+import * as playerActions from '../../actions/playerActions';
 import { draw as drawCard, determinePlayerDrawPile } from '../../utils/deck';
-import { saveGame } from '../../utils/firebaseFunctions';
 
 import DrawPile from '../DrawPile/DrawPile';
 
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
   drawFromAge: (age) => dispatch(deckActions.drawCard(age)),
   updatePlayerHand: (username, newHand) =>
     dispatch(gameActions.updatePlayerHand(username, newHand)),
-  playerActionOccurred: () => dispatch(gameActions.playerActionOccurred()),
+  playerActionOccurred: () => dispatch(playerActions.playerActionOccurred()),
 });
 
 const Deck = ({
@@ -44,18 +44,6 @@ const Deck = ({
   handsByUsername,
   updatePlayerHand,
 }) => {
-  /** saveGame anytime handsByUsername prop updates */
-  useEffect(() => {
-    saveGame(gameId, { handsByUsername });
-  }, [gameId, handsByUsername]);
-  /** saveGame anytime playersByUsername prop updates */
-  useEffect(() => {
-    saveGame(gameId, { playersByUsername });
-  }, [gameId, playersByUsername]);
-  /** saveGame anytime deck prop updates */
-  useEffect(() => {
-    saveGame(gameId, { deck });
-  }, [gameId, deck]);
   /**
    * @name drawPileClicked
    * @param {string} age 

@@ -28,6 +28,7 @@ const initialState = {
 // are no mutations
 const playersReducer = produce((draft, { type, payload }) => {
   switch (type) {
+    case actions.START_GAME:
     case actions.SET_PLAYERS:
       draft.usernames = Object.keys(payload.players);
       draft.playersByUsername = payload.players;

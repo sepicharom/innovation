@@ -34,6 +34,7 @@ const initialState = {
 // are no mutations
 const deckReducer = produce((draft, { type, payload }) => {
   switch (type) {
+    case actions.START_GAME:
     case actions.SET_DECK:
       Object.keys(payload.deck).forEach(age => {
         draft[age] = payload.deck[age];

@@ -9,16 +9,16 @@ import { combineReducers } from 'redux';
 
 // import all reducers
 import deckReducer from './deckReducer';
+import gameReducer from './gameReducer';
 import cardsReducer from './cardsReducer';
 import playersReducer from './playersReducer';
 import achievementsReducer from './achievementsReducer';
-import playerBoardsReducer from './playerBoardsReducer';
 
 // combine reducers and export
 export default combineReducers({
   deck: deckReducer,
+  game: gameReducer,
   cards: cardsReducer,
   players: playersReducer,
-  boards: playerBoardsReducer,
   achievements: achievementsReducer,
 });

@@ -27,6 +27,13 @@ const initialState = {
 // are no mutations
 const gameReducer = produce((draft, { type, payload }) => {
   switch (type) {
+    case actions.START_GAME:
+      draft.gameReady = true;
+      draft.gameId = payload.gameId;
+      Object.keys(payload.hands).forEach((username) => {
+        draft.handsByUsername[username] = payload.hands[username];
+      });
+      break;
     case actions.SET_GAME_READY:
       draft.gameReady = true;
       break;
