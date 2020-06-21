@@ -57,7 +57,7 @@ const Players = ({
         key={name}
         name={name}
         hand={playerHand}
-        firstPlayer={playerIdx === 0}
+        isCurrentPlayer={currentPlayer === name}
       />
     );
   });

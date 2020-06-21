@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import Collapse from '../../libs/ui/Collapse/Collapse';
 
 import styled from 'styled-components/macro';
 
@@ -8,13 +11,23 @@ const StyledHand = styled.div`
   grid-gap: 2rem;
 `;
 
-const Player = ({ name, hand, firstPlayer }) => {
+const Player = ({ name, hand, isCurrentPlayer }) => {
   return (
     <div>
       <h2>{name}</h2>
-      <StyledHand>{hand}</StyledHand>
+      <Collapse
+        header="Hand"
+        content={<StyledHand>{hand}</StyledHand>}
+        shouldDefaultOpen={isCurrentPlayer}
+      />
     </div>
   );
+};
+
+Player.propTypes = {
+  name: PropTypes.string.isRequired,
+  hand: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isCurrentPlayer: PropTypes.bool.isRequired,
 };
 
 export default Player;
