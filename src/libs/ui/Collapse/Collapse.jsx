@@ -9,7 +9,7 @@
  * ************************************
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components/macro';
@@ -45,7 +45,8 @@ const Caret = styled.div`
   }
 `;
 
-const CaretIcon = styled.span(({ isOpen }) => `
+const CaretIcon = styled.span(
+  ({ isOpen }) => `
   color: var(--charcoal-light);
   border-top: 1rem solid transparent;
   border-bottom: 1rem solid transparent;
@@ -58,65 +59,48 @@ const CaretIcon = styled.span(({ isOpen }) => `
   margin-left: 5px;
   vertical-align: middle;
   ${isOpen ? 'transform: rotate(90deg);' : ''}
-`);
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.15s;
+  transition-property: transform;
+  transition-delay: 0.1s;
+`
+);
 
-const Details = styled.div(({ descriptionHeight }) => `
+const detailsOpenStyles = `
+  max-height: 100%;
+  opacity: 1;
+`;
+
+const detailsClosedStyles = `
+  max-height: 0;
   overflow: hidden;
-  transition: .5s max-height ease;
-  max-height: ${descriptionHeight}px;
-`);
+  opacity: 0;
+`;
 
-const Collapse = ({
-  header,
-  content,
-  shouldDefaultOpen,
-}) => {
-  const [collapsedData, setCollapsedData] = useState({
-    collapsed: true,
-    descriptionHeight: 0,
-  });
+const Details = styled.div(
+  ({ isOpen }) => `
+  ${isOpen ? detailsOpenStyles : detailsClosedStyles}
+  transition-timing-function: linear, ease;
+  transition-duration: 0.15s;
+  transition-property: opacity, max-height;
+  transition-delay: 0.1s;
+`
+);
 
-  const contentRefContainer = useRef(null);
-
-  function calculateHeight() {
-    // Find number of child elements inside the collapse
-    const numberOfChildren = contentRefContainer.current.children.length;
-    // Calculate total height of all child elements inside the collapse
-    const collapseHeight = Array.from(contentRefContainer.current.children).reduce((accum, curr) => accum += curr.clientHeight, 0);
-
-    return collapseHeight * numberOfChildren;
-  }
-
-  function toggleCollapse() {
-    // Set the total height of all elements
-    setCollapsedData({
-      collapsed: !collapsedData.collapsed,
-      descriptionHeight: !collapsedData.collapsed ? 0 : calculateHeight(),
-    });
-  }
-
-  useEffect(() => {
-    if (shouldDefaultOpen) toggleCollapse();
-  }, []);
+const Collapse = ({ header, content, shouldDefaultOpen }) => {
+  const [open, setOpen] = useState(shouldDefaultOpen);
 
   return (
-    <CollapseWrapper onClick={toggleCollapse}>
+    <CollapseWrapper onClick={() => setOpen(!open)}>
       <Row>
         <Caret>
-          <CaretIcon isOpen={!collapsedData.collapsed} />
+          <CaretIcon isOpen={open} />
         </Caret>
-        <h3>
-          {header}
-        </h3>
+        <h3>{header}</h3>
       </Row>
-      <Details
-        descriptionHeight={collapsedData.descriptionHeight}
-        ref={contentRefContainer}
-      >
-        {content}
-      </Details>
+      <Details isOpen={open}>{content}</Details>
     </CollapseWrapper>
-  )
+  );
 };
 
 Collapse.defaultProps = {
@@ -127,6 +111,6 @@ Collapse.propTypes = {
   header: PropTypes.string.isRequired,
   content: PropTypes.node.isRequired,
   shouldDefaultOpen: PropTypes.bool.isRequired,
-}
+};
 
 export default Collapse;
