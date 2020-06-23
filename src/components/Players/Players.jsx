@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as gameActions from '../../actions/gameActions';
 
-import Card from '../CardFront/CardFront';
+
 import Player from '../Player/Player';
 import Header from '../../libs/ui/Header/Header';
 import Paragraph from '../../libs/ui/Paragraph/Paragraph';
@@ -26,14 +25,7 @@ const mapStateToProps = (store) => ({
   handsByUsername: store.game.handsByUsername,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  updatePlayerHand: (player, hand) =>
-    dispatch(gameActions.updatePlayerHand(player, hand)),
-});
-
 const Players = ({
-  cardsById,
-  handsByUsername,
   playerData: {
     gameId,
     usernames,
@@ -49,15 +41,10 @@ const Players = ({
   //   saveGame(gameId, { actionNumber });
   // }, [gameId, actionNumber]);
   const AllPlayers = usernames.map((name, playerIdx) => {
-    const playerHand = handsByUsername[name]
-      .filter((cardId) => cardsById[cardId])
-      .map((cardId) => <Card key={cardId} {...cardsById[cardId]} />);
     return (
       <Player
         key={name}
         name={name}
-        hand={playerHand}
-        isCurrentPlayer={currentPlayer === name}
       />
     );
   });
@@ -74,4 +61,4 @@ const Players = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Players);
+export default connect(mapStateToProps, null)(Players);
