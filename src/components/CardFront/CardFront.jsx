@@ -63,9 +63,10 @@ const CardFront = ({
   num_lightbulbs,
   num_factories,
   num_timepieces,
+  handleClick,
 }) => {
   return (
-    <CardWrapper color={color}>
+    <CardWrapper color={color} onClick={handleClick}>
       <TopGrid>
         <Resource resource={resource_space_1} />
         <div>
