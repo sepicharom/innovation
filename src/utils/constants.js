@@ -5,7 +5,7 @@
  *              the app. changing may cause side-effects
  */
 export const COLORS = Object.freeze([
-  'RED', 'BLUE', 'YELLOW', 'PURPLE', 'GREEN',
+  'red', 'blue', 'yellow', 'purple', 'green',
 ])
 
 export const STARTING_PLAYER = Object.freeze({
