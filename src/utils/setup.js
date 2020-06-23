@@ -1,4 +1,4 @@
-import { STARTING_PLAYER } from './constants';
+import { STARTING_PLAYER, COLORS } from './constants';
 import { shuffle } from './deck';
 
 const createDeck = (cards) => {
@@ -49,4 +49,16 @@ export const selectStarterHands = (age1Cards, players) => {
     starterHands[username].push(age1Cards.pop())
   );
   return starterHands;
+};
+
+export const createStarterBoards = (players) => {
+  const STARTER_BOARD = COLORS.reduce((board, color) => {
+    board[color] = [];
+    return board;
+  }, {});
+  const starterBoards = players.reduce((byUsername, username) => {
+    byUsername[username] = Object.assign({}, STARTER_BOARD);
+    return byUsername;
+  }, {});
+  return starterBoards;
 };

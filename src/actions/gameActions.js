@@ -3,6 +3,7 @@ import {
   createPlayers,
   createStarterDeck,
   selectStarterHands,
+  createStarterBoards,
 } from '../utils/setup';
 import { createGame } from '../utils/firebaseFunctions';
 
@@ -69,12 +70,14 @@ export const setupGame = (formValues, cardsById) => async (
     const gameData = await createGame(players);
     const { deck, achievementsByAge } = createStarterDeck(cardsById);
     const hands = selectStarterHands(deck[1], Object.keys(players));
+    const boards = createStarterBoards(Object.keys(players));
     dispatch(
       startGame({
-        players,
         deck,
-        achievementsByAge,
         hands,
+        boards,
+        players,
+        achievementsByAge,
         gameId: gameData.id,
       })
     );
