@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import * as gameActions from '../../actions/gameActions';
+import * as gameActions from '../../actions/gameActions';
+import * as playerActions from '../../actions/playerActions';
 
 import Card from '../CardFront/CardFront';
 import Collapse from '../../libs/ui/Collapse/Collapse';
@@ -20,12 +21,16 @@ const mapStateToProps = (store) => ({
   handsByUsername: store.game.handsByUsername,
 });
 
-// dispatch(gameActions.updatePlayerHand(player, hand)),
-
-const Hand = ({ player, currentPlayer, handsByUsername, cardsById }) => {
+const Hand = ({ player, currentPlayer, handsByUsername, cardsById, dispatch }) => {
+  const cardClicked = (cardId) => {
+    if (player !== currentPlayer) return;
+    const card = cardsById[cardId];
+    dispatch(gameActions.meldCard(player, card.color, cardId));
+    dispatch(playerActions.playerActionOccurred());
+  };
   const Cards = handsByUsername[player]
     .filter((cardId) => cardsById[cardId])
-    .map((cardId) => <Card key={cardId} {...cardsById[cardId]} />);
+    .map((cardId) => <Card key={cardId} {...cardsById[cardId]} handleClick={() => cardClicked(cardId)} />);
   return (
     <Collapse
       header="Hand"
@@ -37,6 +42,8 @@ const Hand = ({ player, currentPlayer, handsByUsername, cardsById }) => {
 
 Hand.propTypes = {
   player: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  cardsById: PropTypes.object.isRequired,
   currentPlayer: PropTypes.string.isRequired,
   handsByUsername: PropTypes.object.isRequired,
 };
