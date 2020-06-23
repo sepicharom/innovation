@@ -64,9 +64,13 @@ const gameReducer = produce((draft, { type, payload }) => {
       draft.handsByUsername[payload.username] = payload.newHand;
       break;
     case actions.MELD_CARD:
-      draft.boardsByUsername[payload.username][payload.color].push(
-        payload.card
-      );
+      const cardIdx = draft.handsByUsername[payload.username].indexOf(payload.card);
+      if (cardIdx > -1) {
+        draft.handsByUsername[payload.username].splice(cardIdx, 1);
+        draft.boardsByUsername[payload.username][payload.color].push(
+          payload.card
+        );
+      }
       break;
     default:
       return draft;
