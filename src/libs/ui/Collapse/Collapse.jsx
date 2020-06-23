@@ -91,8 +91,8 @@ const Collapse = ({ header, content, shouldDefaultOpen }) => {
   const [open, setOpen] = useState(shouldDefaultOpen);
 
   return (
-    <CollapseWrapper onClick={() => setOpen(!open)}>
-      <Row>
+    <CollapseWrapper>
+      <Row onClick={() => setOpen(!open)}>
         <Caret>
           <CaretIcon isOpen={open} />
         </Caret>
